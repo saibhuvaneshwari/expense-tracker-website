@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local

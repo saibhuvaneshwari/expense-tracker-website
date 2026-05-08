@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="importmap">
+        {
+          "imports": {
+            "firebase/app": "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js",
+            "firebase/analytics": "https://www.gstatic.com/firebasejs/10.11.0/firebase-analytics.js",
+            "firebase/firestore": "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js"
+          }
+        }
+    </script>
+</head>
+<body>
+    <!-- Auth Section -->
+    <section id="authView" class="auth-view hidden">
+        <div class="auth-card card">
+            <h1 class="auth-title">Expense Tracker</h1>
+            <h2 id="authFormTitle">Login</h2>
+            <form id="authForm" class="form-body">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="primary-button full-width" id="btnAuthSubmit">Login</button>
+            </form>
+            <div class="auth-toggle">
+                <span id="authToggleText">Don't have an account?</span>
+                <button type="button" id="btnToggleAuth" class="text-button">Register</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- App View -->
+    <header class="app-header hidden" id="appHeader">
+        <div class="container header-container">
+            <h1>Expense Tracker</h1>
+            <div class="header-actions">
+                <button id="btnSettings" class="icon-button" aria-label="Settings">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                </button>
+                <button id="btnLogout" class="icon-button" aria-label="Logout">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container hidden" id="appMain">
+        <!-- Dashboard Section -->
+        <section class="dashboard">
+            <div class="summary-cards">
+                <div class="card summary-card">
+                    <h3>Net Balance</h3>
+                    <p class="amount" id="netBalance">₹0.00</p>
+                </div>
+                <div class="card summary-card">
+                    <h3>Income</h3>
+                    <p class="amount success" id="totalIncome">₹0.00</p>
+                </div>
+                <div class="card summary-card">
+                    <h3>Expense</h3>
+                    <p class="amount error" id="totalExpense">₹0.00</p>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="budget-card card">
+                    <div class="card-header">
+                        <h3>Monthly Budget</h3>
+                        <button id="btnSetBudget" class="text-button">Edit</button>
+                    </div>
+                    <div class="budget-progress">
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="budgetProgressFill"></div>
+                        </div>
+                        <div class="budget-stats">
+                            <span id="budgetSpent" class="amount-small">₹0.00</span>
+                            <span class="muted">/</span>
+                            <span id="budgetTotal" class="amount-small muted">₹0.00</span>
+                        </div>
+                    </div>
+                    <p id="budgetWarning" class="warning-text hidden">You are nearing your budget limit!</p>
+                </div>
+
+                <div class="chart-card card">
+                    <h3>Spend Trend (Current Month)</h3>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transactions Section -->
+        <section class="transactions-section">
+            <div class="section-header">
+                <h2>Transactions</h2>
+                <div class="filter-actions">
+                    <input type="text" id="searchTransactions" class="search-input" placeholder="Search notes or categories..." aria-label="Search transactions">
+                    <select id="filterType" aria-label="Filter by type" class="filter-select">
+                        <option value="all">All</option>
+                        <option value="expense">Expense</option>
+                        <option value="income">Income</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="transactions-container">
+                <div id="transactionsList" class="transactions-list">
+                    <!-- Transactions injected by JS -->
+                </div>
+                <div id="emptyState" class="empty-state hidden">
+                    <p>No transactions found.</p>
+                    <button class="primary-button" id="btnEmptyStateAdd">Add your first transaction</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Action Button -->
+    <button id="btnAddTransaction" class="fab hidden" aria-label="Add Transaction">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    </button>
+
+    <!-- Modal: Add/Edit Transaction -->
+    <dialog id="transactionModal" class="modal">
+        <div class="modal-content">
+            <form id="transactionForm">
+                <input type="hidden" id="txnId">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Add Transaction</h2>
+                    <button type="button" class="icon-button close-button" id="btnCancelTransaction" aria-label="Close">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+                
+                <div class="form-body">
+                    <div class="form-group">
+                        <label>Type</label>
+                        <div class="segmented-control">
+                            <input type="radio" id="typeExpense" name="type" value="expense" checked>
+                            <label for="typeExpense">Expense</label>
+                            <input type="radio" id="typeIncome" name="type" value="income">
+                            <label for="typeIncome">Income</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <input type="number" id="amount" name="amount" step="0.01" min="0.01" placeholder="0.00" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <input type="text" id="category" name="category" placeholder="e.g. Food, Salary" required list="categoryList">
+                        <datalist id="categoryList">
+                            <option value="Food & Dining">
+                            <option value="Transportation">
+                            <option value="Shopping">
+                            <option value="Bills & Utilities">
+                            <option value="Entertainment">
+                            <option value="Salary">
+                        </datalist>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="note">Note (Optional)</label>
+                        <input type="text" id="note" name="note" placeholder="What was this for?">
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="primary-button full-width">Save Transaction</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <!-- Modal: Settings & Data Tools -->
+    <dialog id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings & Data</h2>
+                <button type="button" class="icon-button close-button" id="btnCloseSettings" aria-label="Close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <div class="form-body">
+                <div class="form-group">
+                    <label for="currencySymbol">Currency Symbol</label>
+                    <input type="text" id="currencySymbol" placeholder="₹" maxlength="3">
+                </div>
+
+                <div class="divider"></div>
+                <h3>Data Management</h3>
+                
+                <div class="data-actions">
+                    <button type="button" id="btnExport" class="secondary-button">Export to CSV</button>
+                    <label class="secondary-button file-upload-btn" tabindex="0">
+                        Import from JSON
+                        <input type="file" id="btnImport" accept=".json" class="visually-hidden">
+                    </label>
+                    <button type="button" id="btnResetData" class="destructive-button">Reset All Data</button>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
