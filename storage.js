@@ -22,14 +22,16 @@ const USERS_KEY = 'expenseTracker:users';
 const SESSION_KEY = 'expenseTracker:session';
 const CURRENT_VERSION = 1;
 
-const defaultData = {
-    version: CURRENT_VERSION,
-    settings: {
-        currency: '₹'
-    },
-    budget: 0,
-    transactions: [] 
-};
+export function getDefaultData() {
+    return {
+        version: CURRENT_VERSION,
+        settings: {
+            currency: '₹'
+        },
+        budget: 0,
+        transactions: [] 
+    };
+}
 
 export function getCurrentUser() {
     return sessionStorage.getItem(SESSION_KEY);
@@ -55,7 +57,7 @@ export async function register(username, password) {
     sessionStorage.setItem(SESSION_KEY, username);
     
     // Initialize user doc in Firestore
-    await saveData(defaultData);
+    await saveData(getDefaultData());
     return true;
 }
 
@@ -66,7 +68,7 @@ export function logout() {
 export async function loadData() {
     try {
         const username = getCurrentUser();
-        if (!username) return { ...defaultData };
+        if (!username) return getDefaultData();
 
         const docRef = doc(db, "users", username);
         const docSnap = await getDoc(docRef);
@@ -74,11 +76,11 @@ export async function loadData() {
         if (docSnap.exists()) {
             return docSnap.data();
         } else {
-            return { ...defaultData };
+            return getDefaultData();
         }
     } catch (e) {
         console.error("Failed to load Firebase data. Returning default.", e);
-        return { ...defaultData };
+        return getDefaultData();
     }
 }
 
@@ -138,5 +140,5 @@ export async function importData(jsonString) {
 }
 
 export async function resetData() {
-    await saveData({ ...defaultData });
+    await saveData(getDefaultData());
 }

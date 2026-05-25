@@ -78,3 +78,12 @@ export function createElement(tag, className = '', attributes = {}) {
     }
     return el;
 }
+/**
+ * Creates a deep clone of an object or array.
+ * @param {any} obj 
+ * @returns {any}
+ */
+export function deepClone(obj) {
+    if (obj === null || typeof obj !== 'object') return obj;
+    return JSON.parse(JSON.stringify(obj));
+}

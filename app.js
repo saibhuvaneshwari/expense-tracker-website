@@ -56,7 +56,8 @@ const els = {
     btnResetData: document.getElementById('btnResetData'),
     
     toastContainer: document.getElementById('toastContainer'),
-    trendChart: document.getElementById('trendChart')
+    trendChart: document.getElementById('trendChart'),
+    categoryBreakdownList: document.getElementById('categoryBreakdownList')
 };
 
 // Initialization
@@ -163,6 +164,7 @@ function renderAll() {
     renderDashboard();
     renderTransactions();
     renderChart();
+    renderCategoryBreakdown();
 }
 
 function renderDashboard() {
@@ -332,13 +334,11 @@ async function handleTransactionSubmit(e) {
         if (index > -1) {
             txn.createdAt = appData.transactions[index].createdAt;
             appData.transactions[index] = txn;
-            await updateTransaction(txn);
         }
     } else {
         // Add new
         txn.createdAt = txn.updatedAt;
         appData.transactions.push(txn);
-        await addTransaction(txn);
     }
     
     await saveData(appData);
@@ -355,7 +355,6 @@ async function initiateDelete(id) {
     // Store temporarily and remove from view
     pendingDeleteTxn = appData.transactions[index];
     appData.transactions.splice(index, 1);
-    await deleteTransaction(id);
     await saveData(appData);
     renderAll();
     
@@ -367,7 +366,6 @@ async function initiateDelete(id) {
         onAction: async () => {
             if (pendingDeleteTxn) {
                 appData.transactions.push(pendingDeleteTxn);
-                await addTransaction(pendingDeleteTxn);
                 await saveData(appData);
                 renderAll();
                 pendingDeleteTxn = null;
@@ -586,6 +584,91 @@ window.addEventListener('resize', () => {
     clearTimeout(window.resizeTimer);
     window.resizeTimer = setTimeout(renderChart, 200);
 });
+
+const CATEGORY_COLORS = {
+    'food & dining': '#4ADE80',      // Mint Green
+    'transportation': '#60A5FA',     // Blue
+    'shopping': '#F87171',           // Red
+    'bills & utilities': '#FBBF24',  // Amber/Yellow
+    'entertainment': '#C084FC',      // Purple
+    'salary': '#34D399',             // Emerald
+    'other': '#9CA3AF'               // Gray
+};
+
+function renderCategoryBreakdown() {
+    els.categoryBreakdownList.innerHTML = '';
+    
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+    
+    // Group monthly expenses by category
+    const categoryTotals = {};
+    let totalExpense = 0;
+    
+    appData.transactions.forEach(txn => {
+        if (txn.type === 'expense') {
+            const d = new Date(txn.date);
+            if (d.getMonth() === currentMonth && d.getFullYear() === currentYear) {
+                const cat = txn.category.trim();
+                categoryTotals[cat] = (categoryTotals[cat] || 0) + txn.amount;
+                totalExpense += txn.amount;
+            }
+        }
+    });
+    
+    if (totalExpense === 0) {
+        els.categoryBreakdownList.innerHTML = `<p class="muted" style="font-size: 0.875rem; text-align: center; padding: var(--space-4) 0;">No expenses logged this month.</p>`;
+        return;
+    }
+    
+    // Convert to array and sort descending
+    const sortedCategories = Object.entries(categoryTotals)
+        .map(([name, amount]) => ({ name, amount }))
+        .sort((a, b) => b.amount - a.amount);
+        
+    // Take top 3, and group remaining as "Other"
+    const topCategories = [];
+    let otherSum = 0;
+    
+    sortedCategories.forEach((cat, idx) => {
+        if (idx < 3) {
+            topCategories.push(cat);
+        } else {
+            otherSum += cat.amount;
+        }
+    });
+    
+    if (otherSum > 0) {
+        topCategories.push({ name: 'Other', amount: otherSum });
+    }
+    
+    const sym = appData.settings.currency;
+    
+    topCategories.forEach(cat => {
+        const percent = (cat.amount / totalExpense) * 100;
+        const color = CATEGORY_COLORS[cat.name.toLowerCase()] || CATEGORY_COLORS['other'];
+        
+        const item = document.createElement('div');
+        item.className = 'category-breakdown-item';
+        item.innerHTML = `
+            <div class="category-info-row">
+                <div class="category-name-group">
+                    <span class="category-color-dot" style="background-color: ${color};"></span>
+                    <span>${sanitizeHTML(cat.name)}</span>
+                    <span class="category-percentage">${percent.toFixed(0)}%</span>
+                </div>
+                <div class="category-amount-group">
+                    ${formatCurrency(cat.amount, sym)}
+                </div>
+            </div>
+            <div class="category-progress-bg">
+                <div class="category-progress-fill" style="width: ${percent}%; background-color: ${color};"></div>
+            </div>
+        `;
+        els.categoryBreakdownList.appendChild(item);
+    });
+}
 
 // Boot
 init();

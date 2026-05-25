@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Tracker</title>
+    <title>Smart Budget Manager</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,11 +19,12 @@
         }
     </script>
 </head>
+
 <body>
     <!-- Auth Section -->
     <section id="authView" class="auth-view hidden">
         <div class="auth-card card">
-            <h1 class="auth-title">Expense Tracker</h1>
+            <h1 class="auth-title">Smart Budget Manager</h1>
             <h2 id="authFormTitle">Login</h2>
             <form id="authForm" class="form-body">
                 <div class="form-group">
@@ -45,13 +47,24 @@
     <!-- App View -->
     <header class="app-header hidden" id="appHeader">
         <div class="container header-container">
-            <h1>Expense Tracker</h1>
+            <h1>Smart Budget Manager</h1>
             <div class="header-actions">
                 <button id="btnSettings" class="icon-button" aria-label="Settings">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
+                    </svg>
                 </button>
                 <button id="btnLogout" class="icon-button" aria-label="Logout">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
                 </button>
             </div>
         </div>
@@ -94,6 +107,13 @@
                     <p id="budgetWarning" class="warning-text hidden">You are nearing your budget limit!</p>
                 </div>
 
+                <div class="category-card card" id="categoryBreakdownCard">
+                    <h3>Category Breakdown</h3>
+                    <div id="categoryBreakdownList" class="category-breakdown-list">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+
                 <div class="chart-card card">
                     <h3>Spend Trend (Current Month)</h3>
                     <div class="chart-container">
@@ -108,7 +128,8 @@
             <div class="section-header">
                 <h2>Transactions</h2>
                 <div class="filter-actions">
-                    <input type="text" id="searchTransactions" class="search-input" placeholder="Search notes or categories..." aria-label="Search transactions">
+                    <input type="text" id="searchTransactions" class="search-input"
+                        placeholder="Search notes or categories..." aria-label="Search transactions">
                     <select id="filterType" aria-label="Filter by type" class="filter-select">
                         <option value="all">All</option>
                         <option value="expense">Expense</option>
@@ -131,7 +152,11 @@
 
     <!-- Floating Action Button -->
     <button id="btnAddTransaction" class="fab hidden" aria-label="Add Transaction">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
     </button>
 
     <!-- Modal: Add/Edit Transaction -->
@@ -142,10 +167,14 @@
                 <div class="modal-header">
                     <h2 id="modalTitle">Add Transaction</h2>
                     <button type="button" class="icon-button close-button" id="btnCancelTransaction" aria-label="Close">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
                     </button>
                 </div>
-                
+
                 <div class="form-body">
                     <div class="form-group">
                         <label>Type</label>
@@ -159,12 +188,14 @@
 
                     <div class="form-group">
                         <label for="amount">Amount</label>
-                        <input type="number" id="amount" name="amount" step="0.01" min="0.01" placeholder="0.00" required>
+                        <input type="number" id="amount" name="amount" step="0.01" min="0.01" placeholder="0.00"
+                            required>
                     </div>
 
                     <div class="form-group">
                         <label for="category">Category</label>
-                        <input type="text" id="category" name="category" placeholder="e.g. Food, Salary" required list="categoryList">
+                        <input type="text" id="category" name="category" placeholder="e.g. Food, Salary" required
+                            list="categoryList">
                         <datalist id="categoryList">
                             <option value="Food & Dining">
                             <option value="Transportation">
@@ -199,10 +230,14 @@
             <div class="modal-header">
                 <h2>Settings & Data</h2>
                 <button type="button" class="icon-button close-button" id="btnCloseSettings" aria-label="Close">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
                 </button>
             </div>
-            
+
             <div class="form-body">
                 <div class="form-group">
                     <label for="currencySymbol">Currency Symbol</label>
@@ -211,7 +246,7 @@
 
                 <div class="divider"></div>
                 <h3>Data Management</h3>
-                
+
                 <div class="data-actions">
                     <button type="button" id="btnExport" class="secondary-button">Export to CSV</button>
                     <label class="secondary-button file-upload-btn" tabindex="0">
@@ -229,4 +264,5 @@
 
     <script type="module" src="app.js"></script>
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-# Expense Tracker
+# Smart Budget Manager
 
 A production-quality, offline-capable personal expense tracker built with Vanilla HTML, CSS, and JavaScript.
 
